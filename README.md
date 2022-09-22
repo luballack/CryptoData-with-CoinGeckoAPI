@@ -1,64 +1,57 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## Api description
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This api is a result of the Technical Test for Backend Development Team.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+It consists on two major endpoint's
+- Get a currency data and store into the database: Example "http://localhost/currency/bitcoin".
+- Get a currency data, for a specific data, based on the database or on the CoinGeckoAPI: Example "http://localhost/history/bitcoin/2022-09-20".
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1º Endpoint
+'/currency/{id}'
 
-## Learning Laravel
+This endpoint first use the CoinGeckoAPI to search for the currency send on the route(id), then, the current price of the coin and its last updated date are stored into the database, and then the full response of the CoinGeckoAPI is returned.
+The follow currencys have a table on the database and its data is stored each time the endpoint is acessed:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+|  *tag* | *id*  |
+|:-:|--:|
+| BTC  | bitcoin  |
+|  ETH |ethereum|
+|  ATOM |cosmos|
+|  LUNA |terra-luna-2|
+| DACXI  |dacxi|
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2º Endpoint
+'/history/{id}/{date}'
 
-## Laravel Sponsors
+This endpoint first use the database to search for the currency send on the route(id) by the date(date) also passed on the route, then, if the database has the value of the currency at that date, it will make a *average* of the price and will return it. In case of the database do not contains the value stored, it will use a CoinGeckoAPI public endpoint to return the info about that currency, then, if this currency have a table set, the data will be stored.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+## Docker Sail
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+I used a library from laravel to make the container, a series of actions was made to make it possible and i'll list them:
 
-## Contributing
+*Tested on Ubuntu 22.04(wsl) and virtualbox Ubuntu machine*
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- You have php8.1, composer 2.4.2, docker and docker-compose running on your machine.
+- Create a new folder Ex(myapp)
+- git clone https://github.com/luballack/CryptoData-with-CoinGeckoAPI.git
+- cd CryptoData-with-CoinGeckoAPI/
+- cp .env.example .env
+- composer require laravel/sail --dev //*note: some extensions may be required if not present*
+- php artisan sail:install //*note: choose '0'*
+- COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 ./vendor/bin/sail build
+- ./vendor/bin/sail up //*note: make sure that ports 80 and 3306 are free*
+- sudo chmod 777 -R .env //*note: i had to grant full permissions to the .env and storage to solve a permission issue*
+- sudo chmod 777 -R storage
+- ./vendor/bin/sail artisan key:generate
+- ./vendor/bin/sail artisan migrate --force
 
-## Code of Conduct
+## Host/Deployment 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The api was sucessfully hosted on a heroku service.
+Acessable via url : (https://cryptodata-by-lucaswfr.herokuapp.com/)
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
