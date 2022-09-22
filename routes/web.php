@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//http://127.0.0.1:8000/history/bitcoin/30-12-2017
+//Example http://localhost/history/bitcoin/2022-09-20
 Route::get('/history/{id}/{date}', [CryptoController::class, 'getBitcoinDataByDate', 'id', 'date']);
 
-//http://127.0.0.1:8000/currency/bitcoin
+//Example http://localhost/currency/bitcoin
 Route::get('/currency/{id}', [CryptoController::class, 'saveCurrencyData', 'id']);
