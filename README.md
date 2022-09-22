@@ -44,7 +44,7 @@ I used a library from laravel to make the container, a series of actions was mad
 - php artisan sail:install //*note: choose '0'*
 - COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 ./vendor/bin/sail build
 - ./vendor/bin/sail up //*note: make sure that ports 80 and 3306 are free*
-- sudo chmod 777 -R .env //*note: i had to grant full permissions to the .env and /storage/ to solve a permission issue*
+- sudo chmod 777 -R .env //*note: I had to grant full permissions to the .env and /storage/ to solve a permission issue*
 - sudo chmod 777 -R storage
 - ./vendor/bin/sail artisan key:generate
 - ./vendor/bin/sail artisan migrate --force
@@ -56,3 +56,16 @@ The api was sucessfully hosted on a heroku service.
 Acessable via url : (https://cryptodata-by-lucaswfr.herokuapp.com/)
 
 
+## Local Testing
+This setup was used on testing the api locally on Windows 10 during the develompment, after the endpoints were complete, I started to run the Docker Sail on my wsl(Ubuntu).
+
+php8.1.6, composer 2.4.2, MySql(installed via XAMPP in my case)
+
+
+- cp .env.example .env
+- php artisan key:generate
+- mysql -u root -p"password" -e "DROP DATABASE IF EXISTS laravel;CREATE DATABASE laravel" //*note: if your root's password is empty, you can change the .env file database password row "DB_PASSWORD=" and execute this line of comand without the "password" key*
+- php artisan migrate //*note: If it throws a "SQLSTATE[HY000] [2002]" exception, change the .env file database host's row "DB_HOST=localhost"*
+- php artisan serve
+
+url: http://127.0.0.1:8000/currency/bitcoin
