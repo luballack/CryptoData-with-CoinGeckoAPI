@@ -3,17 +3,17 @@
 
 ## Api description
 
-This api is a result of the Technical Test for Backend Development Team.
+This api is a result of the Technical Test for Dacxi Backend Development Team.
 
 It consists on two major endpoint's
 - Get a currency data and store into the database: Example "http://localhost/currency/bitcoin".
-- Get a currency data, for a specific data, based on the database or on the CoinGeckoAPI: Example "http://localhost/history/bitcoin/2022-09-20".
+- Get a currency date, for a specific data, based on the database or on the CoinGeckoAPI: Example "http://localhost/history/bitcoin/2022-09-20".
 
 ### 1º Endpoint
 '/currency/{id}'
 
 This endpoint first use the CoinGeckoAPI to search for the currency send on the route(id), then, the current price of the coin and its last updated date are stored into the database, and then the full response of the CoinGeckoAPI is returned.
-The follow currencys have a table on the database and its data is stored each time the endpoint is acessed:
+The follow currencys have a table on the database and its data is stored each time this endpoint is acessed:
 
 |  *tag* | *id*  |
 |:-:|--:|
@@ -36,7 +36,7 @@ I used a library from laravel to make the container, a series of actions was mad
 *Tested on Ubuntu 22.04(wsl) and virtualbox Ubuntu machine*
 
 - You have php8.1, composer 2.4.2, docker and docker-compose running on your machine.
-- Create a new folder Ex(myapp)
+- Create a new folder Ex(/myapp/)
 - git clone https://github.com/luballack/CryptoData-with-CoinGeckoAPI.git
 - cd CryptoData-with-CoinGeckoAPI/
 - cp .env.example .env
@@ -44,7 +44,7 @@ I used a library from laravel to make the container, a series of actions was mad
 - php artisan sail:install //*note: choose '0'*
 - COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 ./vendor/bin/sail build
 - ./vendor/bin/sail up //*note: make sure that ports 80 and 3306 are free*
-- sudo chmod 777 -R .env //*note: i had to grant full permissions to the .env and storage to solve a permission issue*
+- sudo chmod 777 -R .env //*note: i had to grant full permissions to the .env and /storage/ to solve a permission issue*
 - sudo chmod 777 -R storage
 - ./vendor/bin/sail artisan key:generate
 - ./vendor/bin/sail artisan migrate --force
@@ -52,6 +52,7 @@ I used a library from laravel to make the container, a series of actions was mad
 ## Host/Deployment 
 
 The api was sucessfully hosted on a heroku service.
+
 Acessable via url : (https://cryptodata-by-lucaswfr.herokuapp.com/)
 
 
