@@ -56,3 +56,16 @@ A API foi hospedada com sucesso em um serviço heroku.
 Acessível por url: (https://cryptodata-by-lucaswfr.herokuapp.com/)
 
 
+## Teste Local
+Essa configuração foi usada para testar a api localmente no Windows 10 durante o desenvolvimento, após a conclusão dos endpoints, comecei a executar o Docker Sail no meu wsl(Ubuntu)
+
+php8.1.6, composer 2.4.2, MySql(instalado via XAMPP, no meu caso)
+
+
+- cp .env.example .env
+- php artisan key:generate
+- mysql -u root -p"password" -e "DROP DATABASE IF EXISTS laravel;CREATE DATABASE laravel" //*nota: se a senha do seu root estiver vazia, você pode alterar a linha de senha do banco de dados do arquivo .env "DB_PASSWORD=" e executar esta linha de comando sem a chave "password"*
+- php artisan migrate //*note:  se ele lançar uma exceção "SQLSTATE[HY000] [2002]", altere a linha do host do banco de dados do arquivo .env "DB_HOST=localhost"*
+- php artisan serve
+
+url: http://127.0.0.1:8000/currency/bitcoin
